@@ -1535,6 +1535,102 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             case SPELLFAMILY_GENERIC:
                 switch (GetId())
                 {
+                    case 145955://力量输出
+                        if (Player* player = target->ToPlayer())
+                        {
+                            uint32 spec = player->GetSpecializationId(player->GetActiveSpec());
+                            int32 amount = -GetEffect(0)->GetAmount();
+                            switch (spec)
+                            {
+                            case SPEC_PALADIN_RETRIBUTION:
+                                player->CastCustomSpell(145978, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_WARRIOR_ARMS:
+                            case SPEC_WARRIOR_FURY:
+                                player->CastCustomSpell(145991, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_DK_FROST:
+                                player->CastCustomSpell(145959, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_DK_UNHOLY:
+                                player->CastCustomSpell(145960, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            }
+                        }
+                        break;
+                    case 146019://敏捷输出型
+                        if (Player* player = target->ToPlayer())
+                        {
+                            uint32 spec = player->GetSpecializationId(player->GetActiveSpec());
+                            int32 amount = -GetEffect(0)->GetAmount();
+                            switch (spec)
+                            {
+                            case SPEC_HUNTER_BEASTMASTER:
+                                player->CastCustomSpell(145964, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_HUNTER_MARKSMAN:
+                                player->CastCustomSpell(145965, SPELLVALUE_BASE_POINT0, amount, player, true);
+                            case SPEC_HUNTER_SURVIVAL:
+                                player->CastCustomSpell(145966, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_SHAMAN_ENHANCEMENT:
+                                player->CastCustomSpell(197009, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_ROGUE_ASSASSINATION:
+                                player->CastCustomSpell(145983, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_ROGUE_COMBAT:
+                                player->CastCustomSpell(145984, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_ROGUE_SUBTLETY:
+                                player->CastCustomSpell(145985, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_MONK_WINDWALKER:
+                                player->CastCustomSpell(145964, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                player->CastSpell(player, 145969, true);
+                                break;
+                            case SPEC_DRUID_FERAL:
+                                player->CastCustomSpell(145961, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            }
+                        }
+                        break;
+                    case 146025://坦克
+                        if (Player* player = target->ToPlayer())
+                        {
+                            uint32 spec = player->GetSpecializationId(player->GetActiveSpec());
+                            int32 amount = -GetEffect(0)->GetAmount();
+                            switch (spec)
+                            {
+                            case SPEC_PALADIN_PROTECTION:
+                                player->CastCustomSpell(145976, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_WARRIOR_PROTECTION:
+                                player->CastCustomSpell(145992, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_DK_BLOOD:
+                                player->CastCustomSpell(145958, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_DRUID_GUARDIAN:
+                                player->CastCustomSpell(145962, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            case SPEC_MONK_BREWMASTER:
+                                player->CastCustomSpell(145967, SPELLVALUE_BASE_POINT0, amount, player, true);
+                                break;
+                            }
+                        }
+                        break;
+                    // Spark of Zandalar
+                    case 138958:
+                        if (target && target->GetTypeId() == TYPEID_PLAYER && target->HasAura(138958))
+                        {
+                            if (target->GetAura(138958)->GetStackAmount() == 10)
+                            {
+                                target->RemoveAurasDueToSpell(138958);
+                                target->CastSpell(target, 138960, true, target->ToPlayer()->GetItemByGuid(GetCastItemGUID()));
+                            }
+                        }
+                        break;
                     case 42292: // PvP Trinket
                     case 59752: // Every Man for Himself
                         if (target && target->GetTypeId() == TYPEID_PLAYER)
