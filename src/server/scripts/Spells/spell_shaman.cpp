@@ -2066,6 +2066,42 @@ class spell_sha_healing_stream_totem : public SpellScriptLoader
         }
 };
 
+// Glyph Rain of Frogs - 147707
+class spell_sha_glyph_of_frogs : public SpellScriptLoader
+{
+    public:
+        spell_sha_glyph_of_frogs() : SpellScriptLoader("spell_sha_glyph_of_frogs") { }
+
+        class spell_sha_glyph_of_frogs_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_sha_glyph_of_frogs_AuraScript);
+
+            void OnApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* _player = GetTarget()->ToPlayer())
+                    _player->learnSpell(SPELL_SHA_RAIN_OF_FROGS, false);
+            }
+
+            void OnRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* _player = GetTarget()->ToPlayer())
+                    if (_player->HasSpell(SPELL_SHA_RAIN_OF_FROGS))
+                        _player->removeSpell(SPELL_SHA_RAIN_OF_FROGS, false, false);
+            }
+
+            void Register()
+            {
+                OnEffectApply += AuraEffectApplyFn(spell_sha_glyph_of_frogs_AuraScript::OnApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+                OnEffectRemove += AuraEffectRemoveFn(spell_sha_glyph_of_frogs_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_sha_glyph_of_frogs_AuraScript();
+        }
+};
+
 void AddSC_shaman_spell_scripts()
 {
     new spell_sha_conductivity();
@@ -2104,4 +2140,5 @@ void AddSC_shaman_spell_scripts()
     new spell_sha_lava_burst();
     new spell_sha_lava_burst_mastery_proc();
     new spell_sha_totemic_projection();
+    new spell_sha_glyph_of_frogs();
 }
