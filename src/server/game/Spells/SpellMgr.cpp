@@ -6780,6 +6780,9 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->ProcChance = 100;
                 spellInfo->ProcFlags = 16;
                 break;
+            case 146195:
+                spellInfo->ProcChance = 10;
+                break;
                 // Item - Shaman T12 Enhancement 2P Bonus
             case 99209:
                 spellInfo->Effects[EFFECT_0].ApplyAuraName = SPELL_AURA_DUMMY;
@@ -8620,9 +8623,6 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[EFFECT_0].TargetA = TARGET_UNIT_TARGET_ANY;
                 break;
                 /*Timeless Isle End*/
-            case 146194: // Legendary Cloak Damage Xuen
-                spellInfo->Effects[EFFECT_0].Effect = 0;
-                break;
             case 150017:
                 spellInfo->Effects[EFFECT_2].Effect = 0;
                 break;
