@@ -1,4 +1,4 @@
-﻿#include "ScriptMgr.h"
+#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 #include "Player.h"
@@ -16,8 +16,8 @@ public:
     bool OnGossipHello(Player* player, Creature* creature)
     {
 
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Get gift!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nothing here", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Reclamar mi Regalo!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Salir", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
         player->SEND_GOSSIP_MENU(907, creature->GetGUID());
 
         return true;
@@ -35,9 +35,9 @@ public:
         case GOSSIP_ACTION_INFO_DEF + 1:
             for (std::list<uint64>::iterator itr = OnlyFirstGift.begin(); itr != OnlyFirstGift.end(); ++itr)
             {
-                if (player->GetGUID() == *itr) { player->SendChatMessage("you already got gift!"); _access = false; break; }
+                if (player->GetGUID() == *itr) { player->SendChatMessage("ya recibiste tu regalo!"); _access = false; break; }
             }
-            if (_access) { player->AddItem(82453, 1); OnlyFirstGift.push_back(player->GetGUID()); }
+            if (_access) { player->AddItem(79769, 1); OnlyFirstGift.push_back(player->GetGUID()); }
             break;
         case GOSSIP_ACTION_INFO_DEF + 3:
             player->CLOSE_GOSSIP_MENU();
@@ -184,16 +184,31 @@ public:
     bool OnGossipHello(Player* player, Creature* creature)
     {
 
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Sylvanas!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Tyrande!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Garrosh!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Jaina!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Varian!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Thrall!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Mograin!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Demon Hunter!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Morph to Valeera!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Nothing there", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Humano!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Humana!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Orco!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Orca!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Draenei!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Draenei(m)!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Troll!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Troll(m)!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Gnomo!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 9);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Gnoma!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a No-Muerto!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 11);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a No-Muerta!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 12);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Enano!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 13);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Enana!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 14);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Elfo de Sangre!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 15);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Elfa de Sangre!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 16);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Elfo de la Noche!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 17);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Elfa de la Noche!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 18);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Tauren!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 19);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Tauren(m)!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 20);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Worgen!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 21);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Worgen(m)!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 22);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Goblin!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 23);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Convertir a Goblin(m)!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 24);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Cerrar Ventana", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 25);
         player->SEND_GOSSIP_MENU(907, creature->GetGUID());
 
         return true;
@@ -209,41 +224,101 @@ public:
         {
         case GOSSIP_ACTION_INFO_DEF + 1:
             if (player)
-                player->SetDisplayId(28213); // Sylvanas
+                player->SetDisplayId(19723); // Human
             break;
         case GOSSIP_ACTION_INFO_DEF + 2:
             if (player)
-                player->SetDisplayId(39620); // Tyrande
+                player->SetDisplayId(37926); // Humana
             break;
         case GOSSIP_ACTION_INFO_DEF + 3:
             if (player)
-                player->SetDisplayId(32904); // Garrosh
+                player->SetDisplayId(37920); // Orco
             break;
         case GOSSIP_ACTION_INFO_DEF + 4:
             if (player)
-                player->SetDisplayId(30863); // Jaina
+                player->SetDisplayId(20316); // Orca
             break;
         case GOSSIP_ACTION_INFO_DEF + 5:
             if (player)
-                player->SetDisplayId(28127); // Varian
+                player->SetDisplayId(37916); // Draenei
             break;
         case GOSSIP_ACTION_INFO_DEF + 6:
             if (player)
-                player->SetDisplayId(38689); // Thrall
+                player->SetDisplayId(20323); // Draeneimujer
             break;
         case GOSSIP_ACTION_INFO_DEF + 7:
             if (player)
-                player->SetDisplayId(30869); // Darion
+                player->SetDisplayId(20321); //Troll
             break;
         case GOSSIP_ACTION_INFO_DEF + 8:
             if (player)
-                player->SetDisplayId(20124); //Demon Hunter
+                player->SetDisplayId(37922); //Trolla
             break;
         case GOSSIP_ACTION_INFO_DEF + 9:
             if (player)
-                player->SetDisplayId(26365); //Valeera
+                player->SetDisplayId(37913); // Gnomo
             break;
         case GOSSIP_ACTION_INFO_DEF + 10:
+            if (player)
+                player->SetDisplayId(20581); // Gnoma
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 11:
+            if (player)
+                player->SetDisplayId(37923); // No-Muerto
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 12:
+            if (player)
+                player->SetDisplayId(37924); //No-Muerta
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 13:
+            if (player)
+                player->SetDisplayId(20317); //Enano
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 14:
+            if (player)
+                player->SetDisplayId(37918); // Enana
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 15:
+            if (player)
+                player->SetDisplayId(20578); // Elfo de Sangre
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 16:
+            if (player)
+                player->SetDisplayId(20579); // Elfa de Sangre
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 17:
+            if (player)
+                player->SetDisplayId(20318); //Elfo de la Noche
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 18:
+            if (player)
+                player->SetDisplayId(37919); //Elfa de la Noche
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 19:
+            if (player)
+                player->SetDisplayId(20585); // Tauren
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 20:
+            if (player)
+                player->SetDisplayId(20584); // Taurena
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 21:
+            if (player)
+                player->SetDisplayId(37915); // Worgen
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 22:
+            if (player)
+                player->SetDisplayId(37914); //Worgena
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 23:
+            if (player)
+                player->SetDisplayId(20582); //Goblin
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 24:
+            if (player)
+                player->SetDisplayId(20583); //Goblina
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 25:
             player->CLOSE_GOSSIP_MENU();
             break;
         }
