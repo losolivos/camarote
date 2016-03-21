@@ -1984,6 +1984,42 @@ class spell_pal_glyph_of_harsh_words : public SpellScriptLoader
         }
 };
 
+// Glyph of Contemplation - 125043
+class spell_pal_glyph_of_Contemplation : public SpellScriptLoader
+{
+    public:
+        spell_pal_glyph_of_Contemplation() : SpellScriptLoader("spell_pal_glyph_of_Contemplation") { }
+
+        class spell_pal_glyph_of_Contemplation_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_pal_glyph_of_Contemplation_AuraScript);
+
+            void OnApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* _player = GetTarget()->ToPlayer())
+                    _player->learnSpell(PALADIN_SPELL_GLYPH_OF_CONTEMPLATION, false);
+            }
+
+            void OnRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Player* _player = GetTarget()->ToPlayer())
+                    if (_player->HasSpell(PALADIN_SPELL_GLYPH_OF_CONTEMPLATION))
+                        _player->removeSpell(PALADIN_SPELL_GLYPH_OF_CONTEMPLATION, false, false);
+            }
+
+            void Register()
+            {
+                OnEffectApply += AuraEffectApplyFn(spell_pal_glyph_of_Contemplation_AuraScript::OnApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+                OnEffectRemove += AuraEffectRemoveFn(spell_pal_glyph_of_Contemplation_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_pal_glyph_of_Contemplation_AuraScript();
+        }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_glyph_of_devotian_aura();
@@ -2032,4 +2068,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_daybreak_heal();
     new spell_pal_guardian();
     new spell_pal_glyph_of_harsh_words();
+    new spell_pal_glyph_of_Contemplation();
 }
