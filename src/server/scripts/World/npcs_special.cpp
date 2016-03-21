@@ -3033,6 +3033,12 @@ class npc_feral_spirit : public CreatureScript
             void Reset()
             {
                 SpiritBiteTimer = 6000;
+
+				Unit* owner = me->GetOwner();
+
+				// Glyph of Spirit Raptors
+				if (owner->HasAura(147783))
+					me->CastSpell(me, 147908, true);
             }
 
             void UpdateAI(const uint32 diff)
