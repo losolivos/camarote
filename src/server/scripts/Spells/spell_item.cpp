@@ -2305,6 +2305,55 @@ public:
     }
 };
 
+//146194 Flurry of Xuen
+class spell_item_flurry_of_xuen : public SpellScriptLoader
+{
+public:
+    spell_item_flurry_of_xuen() : SpellScriptLoader("spell_item_flurry_of_xuen") { }
+
+    class spell_item_flurry_of_xuen_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_item_flurry_of_xuen_AuraScript);
+
+        void OnTick0(AuraEffect const * /*aurEff*/)
+        {
+            PreventDefaultAction();
+            if (Unit* caster = GetCaster())
+            {
+                if (caster->getClass() != CLASS_HUNTER)
+                    caster->CastSpell(caster, 147891, true);
+            }
+        }
+
+        void OnTick1(AuraEffect const * /*aurEff*/)
+        {
+            PreventDefaultAction();
+            if (Unit* caster = GetCaster())
+            {
+                if (caster->getClass() == CLASS_HUNTER)
+                {
+                    if (Player* player = caster->ToPlayer())
+                    {
+                        if (player->GetSelectedUnit())
+                            caster->CastSpell(player->GetSelectedUnit(), 149276, true);
+                    }
+                }
+            }
+        }
+
+        void Register()
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_flurry_of_xuen_AuraScript::OnTick0, EFFECT_0, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_item_flurry_of_xuen_AuraScript::OnTick1, EFFECT_1, SPELL_AURA_PERIODIC_TRIGGER_SPELL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_item_flurry_of_xuen_AuraScript();
+    }
+};
+
 void AddSC_item_spell_scripts()
 {
     // 23074 Arcanite Dragonling
@@ -2360,4 +2409,5 @@ void AddSC_item_spell_scripts()
     new spell_alchemist_rejuvenation();
     new spell_item_dragonwrath_tarecgosas_rest();
     new spell_item_zen_alchemist_stone();
+    new spell_item_flurry_of_xuen();
 }
