@@ -1522,6 +1522,17 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 if (player->HasSpell(139598))
                     player->CastSpell(player, 139597, true);
             }
+
+            if ((m_spellInfo->Id == 131894) && unitTarget->GetHealthPct() <= 20) // murder of crows
+            {
+                m_caster->ToPlayer()->ReduceSpellCooldown(131894, 60);
+            }
+
+            // cloak cooldown
+            if (m_spellInfo->Id == 146194 || m_spellInfo->Id == 146197 || m_spellInfo->Id == 146193)
+            {
+                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, time(NULL) + 20 * TimeConstants::IN_MILLISECONDS);
+            }
         }
 
         // Other special target selection goes here
