@@ -20061,6 +20061,11 @@ uint32 Unit::GetModelForForm(ShapeshiftForm form)
             if (HasAura(58135))
                 return 30162;
             break;
+        case FORM_SPIRITOFREDEMPTION:
+            // Glyph of the Val'kyr
+            if (HasAura(126094))
+                return 24991;
+            break;
         default:
             break;
     }
