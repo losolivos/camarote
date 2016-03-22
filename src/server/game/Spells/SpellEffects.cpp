@@ -1613,7 +1613,7 @@ void Spell::EffectForceCast(SpellEffIndex effIndex)
             if (Pet* pet = m_caster->ToPlayer()->GetPet())
             {
                 pet->AddCreatureSpellCooldown(119914);
-                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, 45 * 1000);
+                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, 45 * 1000, true);
             }
         }
     }

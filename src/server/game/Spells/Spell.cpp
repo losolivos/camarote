@@ -3834,14 +3834,14 @@ void Spell::cast(bool skipCheck)
     CallScriptAfterCastHandlers();
 
     // Hack for Whiplash, TODO: Move to spell-script
-    if (m_spellInfo->Id == 119909 && m_caster->GetTypeId() == TYPEID_PLAYER)
+    if ((m_spellInfo->Id == 119909 || m_spellInfo->Id == 119913) && m_caster->GetTypeId() == TYPEID_PLAYER)
     {
         if (WorldLocation const * loc = m_targets.GetDstPos())
             if (Pet* pet = m_caster->ToPlayer()->GetPet())
             {
                 pet->CastSpell(loc->GetPositionX(), loc->GetPositionY(), loc->GetPositionZ(), 6360, true);
                 pet->AddCreatureSpellCooldown(6360);
-                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, pet->GetCreatureSpellCooldownDelay(6360) * 1000);
+                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, pet->GetCreatureSpellCooldownDelay(6360) * 1000, true);
             }
     }
 
