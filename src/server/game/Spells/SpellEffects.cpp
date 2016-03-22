@@ -1298,7 +1298,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                             {
                                 pet->CastSpell(targets.GetDstPos()->GetPositionX(), targets.GetDstPos()->GetPositionY(), targets.GetDstPos()->GetPositionZ(), damage, true);
                                 pet->AddCreatureSpellCooldown(damage);
-                                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, pet->GetCreatureSpellCooldownDelay(damage) * 1000);
+                                m_caster->ToPlayer()->AddSpellCooldown(m_spellInfo->Id, 0, pet->GetCreatureSpellCooldownDelay(damage) * 1000, true);
                             }
 
                     break;
