@@ -4260,6 +4260,62 @@ public:
     }
 };
 
+enum HealingPotion
+{
+    SPELL_MASTER_HEALING_POTION = 114752
+};
+
+// Master Healing Potion - 114752
+class spell_prof_alch_master_healing_potion : public SpellScriptLoader
+{
+    public:
+        spell_prof_alch_master_healing_potion() : SpellScriptLoader("spell_prof_alch_master_healing_potion") {}
+
+        class script_impl : public SpellScript
+        {
+            PrepareSpellScript(script_impl);
+
+            bool Load()
+            {
+                return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+            }
+
+            bool Validate(SpellInfo const* /*spellEntry*/)
+            {
+                if (!sSpellMgr->GetSpellInfo(SPELL_MASTER_HEALING_POTION))
+                    return false;
+                return true;
+            }
+
+            void HandleScript(SpellEffIndex /*effIndex*/)
+            {
+                Player* caster = GetCaster()->ToPlayer();
+                uint32 skill = caster->GetSkillValue(SKILL_ALCHEMY);
+                uint32 recipes[10] = { 114757, 114755, 114756, 114764, 114765, 114762, 114754, 114773, 114769, 114760 };
+                if (skill < 535)
+                {
+                    if (roll_chance_i((534 - skill)))
+                    {
+                        srand(time(NULL));
+                        uint32 spell = recipes[rand() % 10];
+                        if (!caster->HasSpell(spell))
+                            caster->learnSpell(spell, false);
+                    }
+                }
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(script_impl::HandleScript, EFFECT_0, SPELL_EFFECT_CREATE_ITEM);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new script_impl();
+        }
+};
+
 void AddSC_generic_spell_scripts()
 {
     new spell_gen_absorb0_hitlimit1();
@@ -4326,6 +4382,7 @@ void AddSC_generic_spell_scripts()
     new spell_gen_mount("spell_blazing_hippogryph", 0, 0, 0, SPELL_BLAZING_HIPPOGRYPH_150, SPELL_BLAZING_HIPPOGRYPH_280);
     new spell_gen_mount("spell_celestial_steed", 0, SPELL_CELESTIAL_STEED_60, SPELL_CELESTIAL_STEED_100, SPELL_CELESTIAL_STEED_150, SPELL_CELESTIAL_STEED_280, SPELL_CELESTIAL_STEED_310);
     new spell_gen_mount("spell_x53_touring_rocket", 0, 0, 0, SPELL_X53_TOURING_ROCKET_150, SPELL_X53_TOURING_ROCKET_280, SPELL_X53_TOURING_ROCKET_310);
+    new spell_prof_alch_master_healing_potion();
     new spell_gen_upper_deck_create_foam_sword();
     new spell_gen_bonked();
     new spell_gen_maelstrom_portal();
