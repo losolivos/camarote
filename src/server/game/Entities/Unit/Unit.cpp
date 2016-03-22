@@ -12121,6 +12121,22 @@ uint32 Unit::SpellDamageBonusDone(Unit* victim, SpellInfo const* spellProto, uin
                     if (AuraEffect* fingers = GetAuraEffect(44544, EFFECT_1))
                         AddPct(DoneTotalMod, fingers->GetSpellEffectInfo().BasePoints);
                     break;
+                // Waterbolt
+                case 31707:
+                {
+                    if (Unit* owner = GetCharmerOrOwner())
+                    {
+                        if (owner->GetTypeId() == TYPEID_PLAYER)
+                        {
+                            if (AuraEffect* mastery = owner->GetAuraEffect(76613, EFFECT_2))
+                            {
+                                float amount = mastery->GetFloatAmount();
+                                AddPct(DoneTotalMod, amount);
+                            }
+                        }
+                    }
+                    break;
+                }
             }
 
             // Torment the weak
