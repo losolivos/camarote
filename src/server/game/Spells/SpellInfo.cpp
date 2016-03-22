@@ -3961,6 +3961,7 @@ bool SpellInfo::BreaksInstantlyOnDamage() const
         case 1499:   // Freezing Trap
         case 19503:  // Scatter Shot
         case 115078: // Paralysis
+        case 82691:  // Ring of Frost
             return true;
         default:
             break;
