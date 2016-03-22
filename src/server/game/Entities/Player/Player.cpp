@@ -87,6 +87,7 @@
 #include <cmath>
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
+#define CONFIG_ILVL_CAP 540
 
 namespace {
 
@@ -9220,6 +9221,8 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
     if (only_level_scale && !ssv)
         return;
 
+    float reduc = InBattleground() || InArena() ? proto->ItemLevel / CONFIG_ILVL_CAP : 1.00f;
+
     for (uint8 i = 0; i < MAX_ITEM_PROTO_STATS; ++i)
     {
         uint32 statType = 0;
@@ -9240,6 +9243,9 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
 
         if (val == 0)
             continue;
+
+        if (proto->ItemLevel > CONFIG_ILVL_CAP && apply && reduc > 1.00f)
+            val -= CalculatePct(val, reduc * 10.0f);
 
         switch (statType)
         {
@@ -9378,6 +9384,10 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
                 break;
         }
     }
+    
+    //|color|Hitem:item_id:perm_ench_id:gem1:gem2:gem3:0:0:0:0:reporter_level|h[name]|h|r
+    if (proto->ItemLevel > CONFIG_ILVL_CAP && apply && reduc > 1.00f)
+        ChatHandler(this).PSendSysMessage("|cff00509f|Hitem:%u:%u:%u:%u:%u:0:0:0:0:%u|h[%s]|h|r's stats reduced by %.2f%%.", proto->ItemId, 0, 0, 0, 0, getLevel(), proto->Name1.c_str(), reduc * 10.0f);
 
     // Apply Spell Power from ScalingStatValue if set
     if (ssv && proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
