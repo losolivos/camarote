@@ -4723,7 +4723,7 @@ class npc_glyph_of_decoy : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            void AfterSummon(Unit* summoner, Unit* /*target*/)
+            void AfterSummon(Unit* summoner, Unit* /*target*/, uint32 spell)
             {
                 if (Player* owner = summoner->ToPlayer())
                 {
@@ -4801,7 +4801,7 @@ class npc_s_e_f : public CreatureScript
                 me->ResetPlayerDamageReq();
             }
 
-            void AfterSummon(Unit* summoner, Unit* target)
+            void AfterSummon(Unit* summoner, Unit* target, uint32 spell)
             {
                 if (Player* owner = summoner->ToPlayer())
                 {
