@@ -370,7 +370,7 @@ public:
             {
                 if (instance)
                 {
-                    if (Creature* pIchoron = Unit::GetCreature(*me, instance->GetData64(DATA_ICHORON)))
+                    if (Creature* pIchoron = instance->instance->GetCreature(DATA_ICHORON))
                     {
                         if (me->IsWithinDist(pIchoron, 2.0f, false))
                         {
@@ -388,7 +388,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             DoCast(me, SPELL_SPLASH);
-            if (Creature* pIchoron = Unit::GetCreature(*me, instance->GetData64(DATA_ICHORON)))
+            if (Creature* pIchoron = instance->instance->GetCreature(DATA_ICHORON))
                 if (pIchoron->AI())
                     pIchoron->AI()->DoAction(ACTION_WATER_ELEMENT_KILLED);
         }
