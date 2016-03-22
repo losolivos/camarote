@@ -1783,6 +1783,7 @@ class spell_sha_chain_heal : public SpellScriptLoader
             {
                 firstHeal = true;
                 riptide = false;
+                amount = 0;
                 return true;
             }
 
@@ -1795,14 +1796,16 @@ class spell_sha_chain_heal : public SpellScriptLoader
                     if (AuraEffect *aurEff = GetHitUnit()->GetAuraEffect(SPELL_AURA_PERIODIC_HEAL, SPELLFAMILY_SHAMAN, flags, GetCaster()->GetGUID()))
                     {
                         riptide = true;
-                        // Consume it
-                        GetHitUnit()->RemoveAura(aurEff->GetBase());
+                        amount = aurEff->GetSpellInfo()->Effects[EFFECT_2].CalcValue();
                     }
                     firstHeal = false;
                 }
                 // Riptide increases the Chain Heal effect by 25%
                 if (riptide)
-                    SetHitHeal(GetHitHeal() * 1.25f);
+                {
+                    uint32 bonus = CalculatePct(GetHitHeal(), amount);
+                    SetHitHeal(GetHitHeal() + bonus);
+                }
             }
 
             void Register()
@@ -1812,6 +1815,7 @@ class spell_sha_chain_heal : public SpellScriptLoader
 
             bool firstHeal;
             bool riptide;
+            uint32 amount;
         };
 
         SpellScript* GetSpellScript() const
