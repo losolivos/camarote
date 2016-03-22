@@ -19029,6 +19029,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *charHolder, SQLQueryHolder 
         TC_LOG_ERROR("entities.player", "Player (guidlow %d) have invalid coordinates (MapId: %u X: %f Y: %f Z: %f O: %f). Teleport to default race/class locations.", guid, mapId, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation());
         RelocateToHomebind();
     }
+
     // Player was saved in Arena or Bg
     else if (mapEntry && mapEntry->IsBattlegroundOrArena())
     {
@@ -19038,7 +19039,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *charHolder, SQLQueryHolder 
 
         bool player_at_bg = currentBg && currentBg->IsPlayerInBattleground(GetGUID());
 
-        if (player_at_bg && currentBg->GetStatus() != STATUS_WAIT_LEAVE)
+        if (player_at_bg && currentBg->GetStatus() != STATUS_WAIT_LEAVE && mapEntry->IsBattleground())
         {
             BattlegroundQueueTypeId bgQueueTypeId = sBattlegroundMgr->BGQueueTypeId(currentBg->GetTypeID(), currentBg->GetArenaType());
             AddBattlegroundQueueId(bgQueueTypeId);
