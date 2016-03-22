@@ -2004,6 +2004,9 @@ bool AuraEffect::IsAffectingSpell(SpellInfo const* spell) const
     // Fix Item - Druid PvP Set Balance 4P Bonus
     if (m_spellInfo->Id == 131536 && spell->Id == 127663)
         return true;
+    // Frost Bomb - Haste Affection Aura
+    if (m_spellInfo->Id == 114995 && spell->Id == 112948)
+        return true;
 
     return false;
 }
