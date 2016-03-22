@@ -12947,6 +12947,10 @@ uint32 Unit::SpellHealingBonusDone(Unit* victim, SpellInfo const* spellProto, ui
     {
         AddPct(DoneTotalMod, GetFloatValue(PLAYER_FIELD_PVP_POWER_HEALING));
     }
+    
+    // Dampening
+    if (AuraEffect* aurEff = GetAuraEffect(110310, EFFECT_0))
+        AddPct(DoneTotalMod, -aurEff->GetAmount());
 
     // Check for table values
     SpellBonusEntry const* bonus = sSpellMgr->GetSpellBonusData(spellProto->Id);
@@ -13022,10 +13026,6 @@ uint32 Unit::SpellHealingBonusDone(Unit* victim, SpellInfo const* spellProto, ui
         else
             DoneTotal = int32(1.428f * ToPlayer()->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_HOLY));
     }
-
-    // Dampening
-    if (AuraEffect* aurEff = GetAuraEffect(110310, EFFECT_0))
-        AddPct(DoneTotalMod, -aurEff->GetAmount());
 
     // Unleashed Fury - Earthliving
     if (AuraEffect* aurEff = GetAuraEffect(118473, EFFECT_0))
