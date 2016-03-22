@@ -11376,7 +11376,7 @@ void Unit::SetMinion(Minion *minion, bool apply, bool stampeded)
                 SetCritterGUID(0);
         }
 
-        if (minion->IsWarlockPet()) // grimoire of supremacy
+        if (minion->IsWarlockPet() && !HasAura(108503)) // grimoire of supremacy
             RemoveAurasDueToSpell(119904);
 
         if (minion->IsGuardianPet() && !stampeded)

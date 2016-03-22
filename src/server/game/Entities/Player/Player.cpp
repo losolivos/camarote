@@ -29731,8 +29731,15 @@ void Player::RemovePassiveTalentSpell(uint32 spellId)
             RemoveAura(108503); // Remove Grimoire of sacrifice
             break;
         case 108499:// Grimoire of Supremacy
+        {
             RemoveAura(108499);
+
+            if (Pet* pet = GetPet()) // grimoire of supremacy
+                if (pet->IsWarlockPet())
+                    RemoveAurasDueToSpell(119904);
+
             break;
+        }
         case 108505:// Archimonde's Vengeance
             RemoveAura(116403);
             break;
