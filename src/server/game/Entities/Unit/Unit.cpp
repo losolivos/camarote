@@ -6875,17 +6875,17 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, uint32 absorb, AuraE
 
                     // heal amount
                     int32 bp = CalculatePct(int32(damage), triggerAmount);
+                    uint32 count = 0;
                     std::list<Player*> allies;
                     GetPlayerListInGrid(allies, 15.0f);
-
                     if (allies.empty())
                         return false;
 
                     for (auto itr: allies)
-                        if (!IsInPartyWith(itr->ToUnit()))
-                            allies.remove(itr);
+                        if (IsInPartyWith(itr->ToUnit()))
+                            count++;
 
-                    bp /= allies.size();
+                    bp /= count;
                     CastCustomSpell(this, 15290, &bp, NULL, NULL, true, castItem, triggeredByAura);
                     return true;                                // no hidden cooldown
                 }
