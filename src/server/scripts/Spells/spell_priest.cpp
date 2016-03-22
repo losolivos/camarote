@@ -3011,6 +3011,61 @@ class spell_pri_halo : public SpellScriptLoader
         }
 };
 
+// Called by Prayer of Mending - 33076
+class spell_pri_4p_holy_spark : public SpellScriptLoader
+{
+    public:
+        spell_pri_4p_holy_spark() : SpellScriptLoader("spell_pri_4p_holy_spark") { }
+
+        enum Spells
+        {
+            PRIEST_SPELL_HOLY_SPARK = 131567,
+            PRIEST_SPELL_FLASH_HEAL = 2061,
+            PRIEST_SPELL_GREATER_HEAL = 2060,
+            PRIEST_SPELL_HOLY_WORD_SERENITY = 88684,
+            PRIEST_SPELL_P_F_M = 33076,
+            PRIEST_SPELL_HOLY_SPARK_PASSIVE = 33333
+        };
+
+        class spell_impl : public SpellScript
+        {
+            PrepareSpellScript(spell_impl);
+
+            void HandleDrop(SpellEffIndex /*effIndex*/)
+            {
+                if (GetSpellInfo()->Id != PRIEST_SPELL_FLASH_HEAL 
+                    && GetSpellInfo()->Id != PRIEST_SPELL_GREATER_HEAL 
+                    && GetSpellInfo()->Id != PRIEST_SPELL_HOLY_WORD_SERENITY)
+                    return;
+
+                if (Aura* aura = GetHitUnit()->GetAura(PRIEST_SPELL_HOLY_SPARK))
+                    aura->DropCharge();
+            }
+
+            void HandleSpark(SpellEffIndex /*effIndex*/)
+            {
+                if (!GetCaster()->HasAura(PRIEST_SPELL_HOLY_SPARK_PASSIVE))
+                    return;
+
+                if (GetSpellInfo()->Id != PRIEST_SPELL_P_F_M)
+                    return;
+
+                GetCaster()->CastSpell(GetHitUnit(), PRIEST_SPELL_HOLY_SPARK, true);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_impl::HandleDrop, EFFECT_0, SPELL_EFFECT_HEAL);
+                OnEffectHitTarget += SpellEffectFn(spell_impl::HandleSpark, EFFECT_1, SPELL_EFFECT_TRIGGER_SPELL);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_impl;
+        }
+};
+
 void AddSC_priest_spell_scripts()
 {
     new spell_pri_power_word_fortitude();
@@ -3072,4 +3127,5 @@ void AddSC_priest_spell_scripts()
     new spell_pri_echo_of_light();
     new spell_pri_psychic_terror();
     new spell_pri_halo();
+    new spell_pri_4p_holy_spark();
 }
