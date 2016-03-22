@@ -2401,6 +2401,42 @@ public:
     }
 };
 
+// 2P mage pvp - 131618
+class spell_mage_2p_pvp : public SpellScriptLoader
+{
+    public:
+        spell_mage_2p_pvp() : SpellScriptLoader("spell_mage_2p_pvp") { }
+
+        class aura_impl : public AuraScript
+        {
+            PrepareAuraScript(aura_impl);
+
+            enum
+            {
+                SPELL_COUNTERSPELL = 2139
+            };
+
+            void AfterProc(AuraEffect const *aurEff, ProcEventInfo& eventInfo)
+            {
+                if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
+                    return;
+
+                if (Player* player = GetCaster()->ToPlayer())
+                    player->ReduceSpellCooldown(SPELL_COUNTERSPELL, 4000);
+            }
+
+            void Register()
+            {
+                AfterEffectProc += AuraEffectProcFn(aura_impl::AfterProc, EFFECT_0, SPELL_AURA_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new aura_impl();
+        }
+};
+
 void AddSC_mage_spell_scripts()
 {
     new spell_mage_flamestrike();
@@ -2452,5 +2488,6 @@ void AddSC_mage_spell_scripts()
     new spell_mage_glyph_of_conjure_familiar();
     new spell_mage_illusion();
     new spell_mage_glyph_of_momentum();
+    new spell_mage_2p_pvp();
     new spell_mage_blink();
 }
