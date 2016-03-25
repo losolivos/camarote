@@ -2777,7 +2777,7 @@ class spell_dru_wild_mushroom_heal : public SpellScriptLoader
                 count = targets.size();
             }
 
-            void HandleHeal(SpellEffIndex /*effIndex*/)
+            void HandleHeal()
             {
                 if (!count)
                     return;
