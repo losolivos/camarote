@@ -2408,7 +2408,7 @@ class spell_dru_wild_mushroom_resto : public SpellScriptLoader
                     for (std::list<Creature*>::iterator i = tempList.begin(); i != tempList.end(); ++i)
                     {
                         Unit* owner = (*i)->GetOwner();
-                        if (owner && owner == player && (*i)->isSummon())
+                        if (owner && owner == player && (*i)->IsSummon())
                             continue;
 
                         mushroomlist.remove((*i));
@@ -2463,42 +2463,6 @@ class spell_dru_wild_mushroom_resto : public SpellScriptLoader
         SpellScript* GetSpellScript() const
         {
             return new spell_dru_wild_mushroom_resto_SpellScript();
-        }
-};
-
-// Wild Mushroom - 88747
-class spell_dru_wild_mushroom : public SpellScriptLoader
-{
-    public:
-        spell_dru_wild_mushroom() : SpellScriptLoader("spell_dru_wild_mushroom") { }
-
-        class spell_druid_wild_mushroom_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_druid_wild_mushroom_SpellScript)
-
-            void HandleAfterCast()
-            {
-                if (Player* player = GetCaster()->ToPlayer())
-                {
-                    const SpellInfo* spell = GetSpellInfo();
-
-                    std::list<Creature*> MinionList;
-                    GetCaster()->GetAllMinionsByEntry(MinionList, DRUID_NPC_WILD_MUSHROOM);
-
-                    if (int32(MinionList.size()) > spell->Effects[EFFECT_1].BasePoints)
-                        MinionList.front()->DespawnOrUnsummon();
-                }
-            }
-
-            void Register()
-            {
-                AfterCast += SpellCastFn(spell_druid_wild_mushroom_SpellScript::HandleAfterCast);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_druid_wild_mushroom_SpellScript();
         }
 };
 
@@ -2596,7 +2560,7 @@ class spell_dru_wild_mushroom_detonate : public SpellScriptLoader
                 for (std::list<Creature*>::const_iterator i = list.begin(); i != list.end(); ++i)
                 {
                     Unit* owner = (*i)->GetOwner();
-                    if (owner && owner == player && (*i)->isSummon())
+                    if (owner && owner == player && (*i)->IsSummon())
                     {
                         mushroomList.push_back((*i)->GetGUID());
                         continue;
@@ -2709,7 +2673,7 @@ class spell_dru_wild_mushroom_bloom : public SpellScriptLoader
                 for (std::list<Creature*>::const_iterator i = list.begin(); i != list.end(); ++i)
                 {
                     Unit* owner = (*i)->GetOwner();
-                    if (owner && owner == player && (*i)->isSummon())
+                    if (owner && owner == player && (*i)->IsSummon())
                     {
                         summonList.push_back((*i)->GetGUID());
                         continue;
@@ -2769,7 +2733,7 @@ class spell_dru_wild_mushroom_bloom : public SpellScriptLoader
                             continue;
 
                         mushroom->CastSpell(mushroom, DRUID_SPELL_WILD_MUSHROOM_SUICIDE, true); // Explosion visual and suicide
-                        mushroom->CastSpell(mushroom, SPELL_DRUID_WILD_MUSHROOM_HEAL, true, NULL, NULLAURA_EFFECT, player->GetGUID()); // heal
+                        mushroom->CastSpell(mushroom, SPELL_DRUID_WILD_MUSHROOM_HEAL, true, NULL, NULL, player->GetGUID()); // heal
                         mushroom->RemoveDynObject(SPELL_DRUID_SWIFTMEND);
                         mushroom->RemoveAura(SPELL_DRUID_SWIFTMEND);
                         player->RemoveAura(SPELL_DRUID_WILD_MUSHROOM_GROWING);
@@ -2838,6 +2802,84 @@ class spell_dru_wild_mushroom_heal : public SpellScriptLoader
         SpellScript* GetSpellScript() const
         {
             return new spell_dru_wild_mushroom_heal_SpellScript();
+        }
+};
+
+// Wild Mushroom (Growing effect) - 138611
+class spell_dru_wild_mushroom_growing : public SpellScriptLoader
+{
+    public:
+        spell_dru_wild_mushroom_growing() : SpellScriptLoader("spell_dru_wild_mushroom_growing") { }
+
+        class spell_dru_wild_mushroom_growing_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_wild_mushroom_growing_AuraScript);
+
+            uint32 currAmount;
+
+            bool Load()
+            {
+                currAmount = 0;
+                return true;
+            }
+
+            void CalculateAmount(AuraEffect const * /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
+            {
+                // Max amount : 200% of caster's health
+                amount = GetUnitOwner()->CountPctFromMaxHealth(amount);
+            }
+
+            void OnProc(AuraEffect const * aurEff, ProcEventInfo& eventInfo)
+            {
+                PreventDefaultAction();
+
+                Unit* target = eventInfo.GetActor();
+                if (!target)
+                    return;
+
+                uint32 overHeal = eventInfo.GetHealInfo()->GetHeal();
+                uint32 maxAmount = aurEff->GetAmount();
+                currAmount += overHeal;
+                currAmount = std::min(currAmount, maxAmount);
+
+                int32 newPct = float(currAmount) / float(maxAmount) * 100.0f;
+                int32 bp2 = currAmount;
+
+                std::list<Creature*> tempList;
+                std::list<Creature*> mushroomlist;
+
+                target->GetCreatureListWithEntryInGrid(tempList, DRUID_NPC_WILD_MUSHROOM, 500.0f);
+
+                mushroomlist = tempList;
+
+                // Remove other players mushrooms
+                for (std::list<Creature*>::iterator i = tempList.begin(); i != tempList.end(); ++i)
+                {
+                    Unit* owner = (*i)->GetOwner();
+                    if (owner && owner == target && (*i)->isSummon())
+                        continue;
+
+                    mushroomlist.remove((*i));
+                }
+
+                if (mushroomlist.empty() || mushroomlist.size() > 1)
+                    return;
+
+                Creature* mushroom = mushroomlist.back();
+                mushroom->RemoveAura(SPELL_DRUID_WILD_MUSHROOM_MOD_SCALE);
+                target->CastCustomSpell(mushroom, SPELL_DRUID_WILD_MUSHROOM_MOD_SCALE, &newPct, &bp2, NULL, true);
+            }
+
+            void Register()
+            {
+                DoEffectCalcAmount += AuraEffectCalcAmountFn(spell_dru_wild_mushroom_growing_AuraScript::CalculateAmount, EFFECT_1, SPELL_AURA_DUMMY);
+                OnEffectProc += AuraEffectProcFn(spell_dru_wild_mushroom_growing_AuraScript::OnProc, EFFECT_1, SPELL_AURA_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_dru_wild_mushroom_growing_AuraScript();
         }
 };
 
@@ -4259,9 +4301,11 @@ void AddSC_druid_spell_scripts()
     new spell_dru_cat_form();
     new spell_dru_skull_bash();
     new spell_dru_faerie_swarm();
+    new spell_dru_wild_mushroom_heal();
     new spell_dru_wild_mushroom_resto();
     new spell_dru_wild_mushroom_bloom();
     new spell_dru_wild_mushroom_detonate();
+    new spell_dru_wild_mushroom_growing();
     new spell_dru_wild_mushroom();
     new spell_dru_swiftmend_heal();
     new spell_dru_swiftmend();
@@ -4289,7 +4333,6 @@ void AddSC_druid_spell_scripts()
     new spell_dru_wrath_dream_of_cenarius();
     new spell_dru_dream_of_cenarius_restoration();
     new spell_dru_heart_of_the_wild();
-    new spell_dru_wild_mushroom_heal();
     new spell_dru_rejuv();
     new sat_druid_ursols_vortex();
     new spell_dru_heart_of_the_wild_bonus();
