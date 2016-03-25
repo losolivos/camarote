@@ -2494,7 +2494,7 @@ class spell_dru_wild_mushroom : public SpellScriptLoader
                     for (std::list<Creature*>::iterator i = tempList.begin(); i != tempList.end(); ++i)
                     {
                         Unit* owner = (*i)->GetOwner();
-                        if (owner && owner == player && (*i)->isSummon())
+                        if (owner && owner == player && (*i)->IsSummon())
                             continue;
 
                         mushroomlist.remove((*i));
@@ -2856,7 +2856,7 @@ class spell_dru_wild_mushroom_growing : public SpellScriptLoader
                 for (std::list<Creature*>::iterator i = tempList.begin(); i != tempList.end(); ++i)
                 {
                     Unit* owner = (*i)->GetOwner();
-                    if (owner && owner == target && (*i)->isSummon())
+                    if (owner && owner == target && (*i)->IsSummon())
                         continue;
 
                     mushroomlist.remove((*i));
